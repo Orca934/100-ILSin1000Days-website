@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>100 Shekels From Sahar Avraham in 1,000 Days</title>
+    <!-- Google Font for fancy "money style" -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100%;
+            margin: 0;
+            background-color: #f0f0f0;
+            /* Set background image of 100 New Shekel bill */
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/d/da/100_New_Sheqalim2017_Obverse_%26_Reverse.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            overflow: auto;
+        }
+
+        #output {
+            width: 80%;  /* Adjust width as needed */
+            font-size: 1.5em;
+            margin-top: 120px; /* Increased space between title, info box, and sword messages */
+            text-align: left; /* Align the sword messages to the left */
+            padding: 10px;
+            box-sizing: border-box;
+            white-space: normal; /* Allow the swords to wrap to the next line */
+            overflow-y: auto; /* Enable vertical scrolling for the #output container */
+            overflow-x: hidden; /* Prevent horizontal overflow, allow wrapping */
+            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background for contrast */
+            border-radius: 10px; /* Rounded corners for the output container */
+        }
+
+        #info {
+            position: absolute;
+            top: 100px; /* Move the info box down */
+            left: 20px;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #fff; /* White text color */
+            background-color: #28a745; /* Green background */
+            border: 2px solid #1e7e34; /* Darker green border */
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        /* Title wrapper with full width white background */
+        #title-wrapper {
+            width: 100%; /* Full width */
+            background-color: #fff; /* White background for the rectangle */
+            padding: 20px; /* Add some space around the title */
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        #title {
+            font-size: 4em; /* Increase font size for the title */
+            font-weight: bold;
+            color: #FF6600; /* Orange text color */
+            background: linear-gradient(45deg, #FFD700, #FF6600); /* Gradient between yellow and orange */
+            -webkit-background-clip: text; /* Clip the gradient to the text */
+            color: transparent; /* Make the text color transparent so the gradient shows */
+            font-family: 'Playfair Display', serif; /* Fancy money style font */
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); /* Add a subtle shadow for a more glamorous effect */
+        }
+
+        .box {
+            border: 2px solid #333; /* Dark border around the sword and date */
+            padding: 15px; /* Padding inside the box */
+            margin-bottom: 30px; /* Space between each box (sword + date) */
+            display: inline-block; /* Keep boxes inline until they run out of space */
+        }
+
+        .sword-message {
+            font-weight: bold;
+            display: inline-block; /* Keep the sword messages inline */
+            margin-right: 15px; /* Add space between sword drawings */
+        }
+
+        .light-brown {
+            color: #cd853f; /* Vibrant light brown color for the "=" characters */
+        }
+
+        .gold {
+            color: #FFD700; /* Golden color for the "o" */
+        }
+
+        .green {
+            color: #00FF00; /* Full saturation green for the "$" */
+        }
+
+        .steel-grey {
+            color: #474747; /* Steel grey color for the remaining characters */
+        }
+
+        .date {
+            font-size: 1em;
+            color: #333; /* Dark color for the date */
+            margin-top: 5px; /* Reduced space between the sword and the date */
+            font-style: italic;
+            display: block; /* Make the date a block element to appear below each sword */
+        }
+    </style>
+</head>
+<body>
+    <!-- Title with a full-width white rectangle around it -->
+    <div id="title-wrapper">
+        <div id="title">100 Shekels From Sahar Avraham in 1,000 Days</div>
+    </div>
+
+    <div id="info">Days out of 1000: 0/1000 | Days left: 1000</div>
+    <div id="output"></div>
+
+    <script>
+        const startDate = new Date("2024-11-14T00:00:00Z"); // Set the fixed start date to 11/13/2024 at 00:00
+        const targetDays = 1000; // Total number of days in the countdown
+        const infoElement = document.getElementById('info');
+        const outputElement = document.getElementById('output');
+
+        function calculateDaysPassed() {
+            const currentDate = new Date(); // Get current real-time date
+            const timeDiff = currentDate - startDate; // Difference in milliseconds
+            return Math.floor(timeDiff / (1000 * 60 * 60 * 24)); // Convert to full days
+        }
+
+        function formatDate(date) {
+            // Format the date as MM/DD/YYYY
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const year = date.getFullYear();
+            return `${month}/${day}/${year}`;
+        }
+
+        function printSwords() {
+            const daysPassed = calculateDaysPassed(); // Get the number of days passed
+            const daysLeft = targetDays - daysPassed; // Calculate remaining days
+            infoElement.innerHTML = `Days out of 1000: ${daysPassed}/${targetDays} | Days left: ${daysLeft}`;
+
+            // Generate sword message with colored "o" as gold, "=" as light brown, "$" as green, and the rest as steel grey
+            const swordMessage = `
+                <span class="gold">o</span><span class="light-brown">=</span><span class="light-brown">=</span><span class="green">$</span><span class="steel-grey">=====</span><span class="steel-grey">></span>
+            `;
+            
+            // Add swords to the output for each day passed
+            for (let i = 0; i < daysPassed; i++) {
+                const dateString = formatDate(new Date(startDate.getTime() + i * 24 * 60 * 60 * 1000)); // Format the date for each sword
+                outputElement.innerHTML += `
+                    <div class="box">
+                        <div class="sword-message">${swordMessage}</div>
+                        <div class="date">${dateString}</div>
+                    </div>
+                `;
+            }
+        }
+
+        // Call printSwords once to initialize the page
+        printSwords();
+    </script>
+</body>
+</html>
